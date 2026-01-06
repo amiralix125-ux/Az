@@ -8,7 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <style>
-/* استایل‌ها */
 *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
 html,body{ margin:0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; }
 .bg-img{ position:fixed; top: 0; left: 0; width: 100%; height: 100dvh; object-fit:cover; z-index:-1; filter:none !important; opacity:1 !important; pointer-events: none; }
@@ -28,55 +27,21 @@ input{ flex:1; padding:12px; border-radius:12px; border:1px solid #ccc; transiti
 .send, .camera-btn { background:#ff9800; color:#fff; border:none; padding:12px 16px; border-radius:12px; font-size: 16px; cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
 .send:hover, .camera-btn:hover { background: #ff7800; }
 iframe, video { width: 100%; border-radius:12px; border:0; margin-top:6px; background: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-
-/* استایل بخش پیش‌نمایش عکس */
-#preview-container {
-    display: none; 
-    background: rgba(255, 240, 200, 0.8);
-    padding: 8px;
-    margin-bottom: 8px;
-    border-radius: 12px;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px dashed #ff9800;
-}
-#preview-img {
-    height: 50px;
-    border-radius: 6px;
-    border: 1px solid #fff;
-}
-.preview-info {
-    font-size: 13px;
-    color: #555;
-    flex: 1;
-    margin-right: 10px;
-}
-.close-preview {
-    background: #ff5252;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+#preview-container { display: none; background: rgba(255, 240, 200, 0.8); padding: 8px; margin-bottom: 8px; border-radius: 12px; align-items: center; justify-content: space-between; border: 1px dashed #ff9800; }
+#preview-img { height: 50px; border-radius: 6px; border: 1px solid #fff; }
+.preview-info { font-size: 13px; color: #555; flex: 1; margin-right: 10px; }
+.close-preview { background: #ff5252; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
 </style>
 </head>
 
 <body>
 <img src="https://i.postimg.cc/m2khRtHb/IMG-20251230-162019-034.png" class="bg-img" alt="Background" />
 <div class="chat">
-  <div class="header">🌈 چت با وینول</div>
+  <div class="header">🌈چت با وینول🌈</div>
   <div id="messages" class="messages">
-    <div class="msg bot">سلام! من وینولم اماده ای باهم صحبت کنیم! 🤖</div>
+    <div class="msg bot">سلام! من وینولم اماده‌ای باهم صحبت کنیم! 🤖</div>
   </div>
   <div class="controls">
-    
-    <!-- بخش پیش‌نمایش عکس -->
     <div id="preview-container">
         <div style="display:flex; align-items:center;">
             <img id="preview-img" src="" alt="preview">
@@ -84,15 +49,10 @@ iframe, video { width: 100%; border-radius:12px; border:0; margin-top:6px; backg
         </div>
         <button class="close-preview" onclick="clearImage()">×</button>
     </div>
-
     <div id="input-row" class="input-row">
       <input id="text" placeholder="پیام بنویس... (یا بگو بکش)" autocomplete="off" />
-      
-      <!-- دکمه‌ای که هم دوربین و هم گالری را باز می‌کند -->
       <button class="camera-btn" onclick="openCamera()">📸</button> 
       <button class="send" onclick="send()">ارسال</button>
-      
-      <!-- حذف capture="user" باعث می‌شود سیستم انتخاب فایل باز شود -->
       <input type="file" id="imageUpload" accept="image/*" style="display: none;" />
     </div>
   </div>
@@ -104,8 +64,6 @@ const text=document.getElementById("text");
 const imageUpload = document.getElementById("imageUpload");
 const previewContainer = document.getElementById("preview-container");
 const previewImg = document.getElementById("preview-img");
-
-// متغیر برای ذخیره موقت عکس
 let pendingImageBase64 = null;
 
 const SYSTEM_PROMPT = `You are a helpful assistant for children. Speak Persian. Be funny. Use emojis.`;
@@ -116,17 +74,14 @@ function addUser(t) { const d = document.createElement("div"); d.className = "ms
 function addImageMessage(src) { const d = document.createElement("div"); d.className = "msg user"; d.innerHTML = `<img src="${src}" style="max-width:100%; border-radius:10px;">`; messages.appendChild(d); scrollToBottom(); }
 function addBot(t) { const d = document.createElement("div"); d.className = "msg bot"; d.textContent = t; messages.appendChild(d); scrollToBottom(); return d; }
 function addBotHTML(h) { const d = document.createElement("div"); d.className = "msg bot"; d.innerHTML = h; messages.appendChild(d); scrollToBottom(); return d; }
-
 function openCamera() { imageUpload.click(); }
 
-// انتخاب عکس و نمایش پیش‌نمایش
 imageUpload.addEventListener("change", function (event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function (e) {
             pendingImageBase64 = e.target.result;
-            // نمایش در کادر پیش‌نمایش
             previewImg.src = pendingImageBase64;
             previewContainer.style.display = 'flex';
             text.placeholder = "چیزی راجع به عکس بنویس (یا خالی بفرست)...";
@@ -134,7 +89,7 @@ imageUpload.addEventListener("change", function (event) {
         };
         reader.readAsDataURL(file);
     }
-    imageUpload.value = ""; // ریست
+    imageUpload.value = "";
 });
 
 function clearImage() {
@@ -144,30 +99,20 @@ function clearImage() {
     text.placeholder = "پیام بنویس... (یا بگو بکش)";
 }
 
-// تابع اصلی ارسال
 async function send() {
     let v = text.value.trim();
-    
-    // اگر نه متنی هست و نه عکسی، کاری نکن
     if (!v && !pendingImageBase64) return;
     
-    // نمایش در چت (سمت کاربر)
-    if (pendingImageBase64) {
-        addImageMessage(pendingImageBase64);
-    }
-    if (v) {
-        addUser(v);
-    }
+    if (pendingImageBase64) addImageMessage(pendingImageBase64);
+    if (v) addUser(v);
 
-    // ذخیره موقت دیتا برای ارسال
     const imageToSend = pendingImageBase64;
     const textToSend = v;
 
-    // پاکسازی ورودی‌ها
     text.value = "";
-    clearImage(); // مخفی کردن پیش‌نمایش
+    clearImage();
 
-    // لاجیک خاص: درخواست نقاشی (اگر فقط متن باشد)
+    const lowerV = v.toLowerCase();
     if (!imageToSend && (lowerV.includes('بکش') || lowerV.includes('draw'))) {
         const loadingMsg = addBot("درحال نقاشی... 🎨");
         try {
@@ -180,19 +125,14 @@ async function send() {
         return;
     }
 
-    // ارسال به هوش مصنوعی (متنی یا تصویری)
     const loadingMsg = addBot("..."); 
-    
-    // ساختار پیام ارسالی
     let newMessageContent;
     if (imageToSend) {
-        // اگر عکس داریم
         newMessageContent = [
             { type: "text", text: textToSend || "تحلیل این عکس" },
             { type: "image_url", image_url: { url: imageToSend } }
         ];
     } else {
-        // فقط متن
         newMessageContent = textToSend;
         chatHistory.push({ role: "user", content: textToSend });
     }
@@ -203,7 +143,7 @@ async function send() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 messages: imageToSend 
-                    ? [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: newMessageContent }] // برای عکس تاریخچه نمی‌فرستیم تا سبک بماند
+                    ? [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: newMessageContent }]
                     : chatHistory,
                 seed: getRandomSeed(),
                 model: 'openai'
