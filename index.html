@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8" />
-<title>چت کودکانه</title>
+<title>چت با وینول</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content" />
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -23,9 +23,6 @@ body{ direction:rtl; font-family:Vazirmatn,Tahoma; background: transparent; }
 .bot{ background:rgba(255, 213, 155, 0.95); margin-right:auto; color: #333; }
 .user{ background:rgba(255, 255, 255, 0.95); margin-left:auto; color: #000; }
 .controls{ padding:10px; padding-bottom: max(10px, env(safe-area-inset-bottom)); background: rgba(255, 255, 255, 0.9); border-top: 1px solid #eee; flex-shrink: 0; }
-.buttons{ display:flex; gap:8px; margin-bottom:8px; }
-.buttons button{ flex:1; background:#ffb703; border:none; padding:12px; font-size:16px; border-radius:14px; cursor:pointer; transition: background-color 0.2s; color: #333; font-weight: bold; }
-.buttons button:hover { background: #ffaa00; }
 .input-row{ display:flex; gap:6px; align-items: center; }
 input{ flex:1; padding:12px; border-radius:12px; border:1px solid #ccc; transition: all 0.2s; font-family:Vazirmatn,Tahoma; font-size: 16px; }
 .send, .camera-btn { background:#ff9800; color:#fff; border:none; padding:12px 16px; border-radius:12px; font-size: 16px; cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
@@ -73,9 +70,9 @@ iframe, video { width: 100%; border-radius:12px; border:0; margin-top:6px; backg
 <body>
 <img src="https://i.postimg.cc/m2khRtHb/IMG-20251230-162019-034.png" class="bg-img" alt="Background" />
 <div class="chat">
-  <div class="header">🌈 چت کودکانه هوشمند</div>
+  <div class="header">🌈 چت با وینول</div>
   <div id="messages" class="messages">
-    <div class="msg bot">سلام! من آماده‌ام باهات حرف بزنم، نقاشی بکشم یا برات قصه بذارم! 🤖</div>
+    <div class="msg bot">سلام! من وینولم اماده ای باهم صحبت کنیم! 🤖</div>
   </div>
   <div class="controls">
     
@@ -88,10 +85,6 @@ iframe, video { width: 100%; border-radius:12px; border:0; margin-top:6px; backg
         <button class="close-preview" onclick="clearImage()">×</button>
     </div>
 
-    <div class="buttons">
-      <button onclick="showMusic()">🎵 آهنگ</button>
-      <button onclick="playNextStoryFolder()">📚 قصه</button>
-    </div>
     <div id="input-row" class="input-row">
       <input id="text" placeholder="پیام بنویس... (یا بگو بکش)" autocomplete="off" />
       
@@ -114,53 +107,6 @@ const previewImg = document.getElementById("preview-img");
 
 // متغیر برای ذخیره موقت عکس
 let pendingImageBase64 = null;
-
-// === بخش پخش ویدیو ===
-const folderNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""); 
-let currentFolderIdx = 0;
-
-function playNextStoryFolder() {
-    if (currentFolderIdx >= folderNames.length) {
-        currentFolderIdx = 0;
-        addBot("🎉 قصه‌ها تموم شد! دوباره از اول میذارم.");
-    }
-    const folder = folderNames[currentFolderIdx];
-    playLocalVideo(folder, 1); 
-    currentFolderIdx++; 
-}
-
-function playLocalVideo(folderName, partNum) {
-    const fileName = partNum + ".mp4"; 
-    const videoPath = folderName + "/" + fileName; 
-    const vidId = "vid_" + folderName + "_" + partNum;
-
-    let caption = "🍿 بفرما اینم یه قصه قشنگ!";
-    if(partNum === 2) caption = "قسمت بعدی... 👇";
-
-    addBotHTML(`
-        ${caption}<br>
-        <video id="${vidId}" controls autoplay playsinline>
-           <source src="${videoPath}" type="video/mp4">
-        </video>
-    `);
-
-    setTimeout(() => {
-        const vid = document.getElementById(vidId);
-        if(vid) {
-            vid.onended = function() {
-                if (partNum === 1) {
-                    playLocalVideo(folderName, 2); 
-                } else {
-                    addBotHTML(`تموم شد! 🏁`);
-                }
-            };
-            vid.onerror = function() {
-                addBotHTML(`❌ ای وای! ویدیو باز نشد. (مسیر فایل: ${videoPath})`);
-            };
-        }
-    }, 500);
-}
-// =================================
 
 const SYSTEM_PROMPT = `You are a helpful assistant for children. Speak Persian. Be funny. Use emojis.`;
 let chatHistory = [{ role: "system", content: SYSTEM_PROMPT }];
@@ -198,14 +144,6 @@ function clearImage() {
     text.placeholder = "پیام بنویس... (یا بگو بکش)";
 }
 
-const musicItems = ["kuwwa96","qix33s7","vel4b45","rlp19p7","nswr01v","rdnfzu8","hlhhk2c","lrp8joa","hmjtu5n","tsc4j02","sqjgq6y","wprdfan","lqi28rn","rbx5yog","ium705m","asd84h5","tzbmcv0","osc7jqw","lym9zw9","txu4t6u","smy989m","per067p","imo37bl","ttfw8jw","ulqgk06","jqc6uu8","qayifn7","zrntnb2","ayv587u","nvbu340","uyht078","cpl72h8","wfa2prl","cyz06r4","kys3c8g","tmk0p3k","awj4t0t","pci839t","u24qxc6","Kg1Ww","nez63x2","myoo7e4","axb736y","ksr7t9m","tlkiz84","ofpx6ty","qdfff01","wwx5qjo","vvj06m7","wxr9p44","art7m29","ykul3ps","jomai8a","daar265","wjc1623","orar1w3","ixmh9fc","tabjtjb","rhnn8dy","pcbku25","jsszx26","DieLV","eyx5820","htu7z82","acuvfl8","mlna208","zit77o6","bnr540u","bit4wtp","aoa5q3s","xuvjxmq","9wJhI","ewrkgiv","y976lgg","hgb43fh","sog5y2j","jcjc65z","MGmE3","12GXo","fgw0840","gyegxvk","k39fin9","hyomk6m","z25b666","2HOXR","2i31N","e11x343","qddef27","bftmb4b","jxh4d7j","fmv51mf","gavji9h","nbi5o09","bax6b6l","wcv102q","fay4o4s","ega98k0","nov9rlu","dtn7h6n"];
-let i = 0;
-function showMusic() {
-    let code = musicItems[i];
-    addBotHTML(`🎵 بفرما آهنگ:<br><iframe src="https://www.aparat.com/video/video/embed/videohash/${code}/vt/frame" allowfullscreen></iframe>`);
-    i = (i + 1) % musicItems.length;
-}
-
 // تابع اصلی ارسال
 async function send() {
     let v = text.value.trim();
@@ -228,13 +166,6 @@ async function send() {
     // پاکسازی ورودی‌ها
     text.value = "";
     clearImage(); // مخفی کردن پیش‌نمایش
-
-    // لاجیک خاص: درخواست آهنگ
-    const lowerV = textToSend.toLowerCase();
-    if (lowerV.includes("آهنگ")) { showMusic(); return; }
-    
-    // لاجیک خاص: درخواست قصه
-    if (lowerV.includes("قصه") || lowerV.includes("کارتون")) { playNextStoryFolder(); return; }
 
     // لاجیک خاص: درخواست نقاشی (اگر فقط متن باشد)
     if (!imageToSend && (lowerV.includes('بکش') || lowerV.includes('draw'))) {
